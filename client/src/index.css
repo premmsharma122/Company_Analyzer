@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+body {
+  background-image: url('https://cdn.vectorstock.com/i/1000v/28/53/black-and-white-diagonal-line-pattern-vector-5402853.avif');
+  background-repeat: repeat;
+  padding: 1rem;
+}
