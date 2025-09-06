@@ -11,7 +11,6 @@ import apiRoutes from './routes/apiRoutes.js';
 connectDB();
 
 const app = express();
-const port = process.env.PORT || 5000; // use env port if available
 
 // Middleware
 app.use(cors());
@@ -19,17 +18,12 @@ app.use(express.json());
 
 // --- Root Route ---
 app.get("/", (req, res) => {
-  res.send("✅ Backend is running successfully!");
+  res.send("✅ Backend is running successfully on Vercel!");
 });
 
 // --- API Routes ---
-// Authentication routes
 app.use('/api/auth', authRoutes);
-
-// External API proxy routes
 app.use('/api', apiRoutes);
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+// --- Export app for Vercel ---
+export default app;
