@@ -11,14 +11,18 @@ import apiRoutes from './routes/apiRoutes.js';
 connectDB();
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000; // use env port if available
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// --- API Routes ---
+// --- Root Route ---
+app.get("/", (req, res) => {
+  res.send("✅ Backend is running successfully!");
+});
 
+// --- API Routes ---
 // Authentication routes
 app.use('/api/auth', authRoutes);
 
