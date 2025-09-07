@@ -13,7 +13,12 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = ['https://company-analyzer-tyeq.vercel.app/']; // <--- Change this to your Netlify URL
+
+app.use(cors({
+  origin: allowedOrigins
+}));
+
 app.use(express.json());
 
 // --- Root Route ---
