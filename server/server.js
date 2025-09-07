@@ -13,10 +13,12 @@ connectDB();
 const app = express();
 
 // Middleware
-const allowedOrigins = ['https://companyanalyze-prem.netlify.app/']; // <--- Change this to your Netlify URL
+const allowedOrigins = ['https://companyanalyze-prem.netlify.app']; // ✅ No trailing slash
 
 app.use(cors({
-  origin: allowedOrigins
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
 }));
 
 app.use(express.json());
