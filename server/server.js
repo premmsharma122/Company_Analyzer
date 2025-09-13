@@ -13,7 +13,7 @@ connectDB();
 const app = express();
 
 // Middleware
-const allowedOrigins = ['https://companyanalyze-prem.netlify.app']; // ✅ No trailing slash
+const allowedOrigins = ['http://localhost:5173/']; // ✅ No trailing slash
 
 app.use(cors({
   origin: allowedOrigins,

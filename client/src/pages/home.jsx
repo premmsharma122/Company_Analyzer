@@ -1,180 +1,48 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import useAuth from '../hooks/useAuth.js';
 
-const CompanySelect = () => {
-  const [company, setCompany] = useState('');
-  const [companyData, setCompanyData] = useState(null);
-  const [newsData, setNewsData] = useState(null);
-  const [githubData, setGithubData] = useState(null);
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const backendUrl = import.meta.env.VITE_BACKEND_URL; // ✅ load backend from env
-
-  const handleTrack = async () => {
-    if (!company.trim()) {
-      setMessage("Please enter a company or startup name!");
-      return;
-    }
-
-    setLoading(true);
-    setCompanyData(null);
-    setNewsData(null);
-    setGithubData(null);
-
-    try {
-      // ✅ API calls with backendUrl
-      const symbolResponse = await fetch(
-        `${backendUrl}/api/search-symbol?q=${encodeURIComponent(company)}`
-      );
-      if (!symbolResponse.ok) {
-        throw new Error('Symbol search failed');
-      }
-      const symbolData = await symbolResponse.json();
-
-      if (symbolData.data && symbolData.data.length > 0) {
-        const symbol = symbolData.data[0].symbol;
-
-        const companyResponse = await fetch(
-          `${backendUrl}/api/company/${encodeURIComponent(symbol)}`
-        );
-        const companyData = await companyResponse.json();
-
-        const newsResponse = await fetch(
-          `${backendUrl}/api/news/${encodeURIComponent(company)}`
-        );
-        const newsData = await newsResponse.json();
-
-        const githubResponse = await fetch(
-          `${backendUrl}/api/github/${encodeURIComponent(company)}`
-        );
-        const githubData = await githubResponse.json();
-
-        setCompanyData(companyData);
-        setNewsData(newsData);
-        setGithubData(githubData);
-
-        setMessage(`Successfully fetched data for ${company}.`);
-      } else {
-        setMessage(`Could not find a stock symbol for "${company}".`);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setMessage(`An error occurred while fetching data for "${company}".`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCloseMessage = () => {
-    setMessage('');
-  };
-
+const Home = () => {
+  const { isAuthenticated } = useAuth();
+  
   return (
-    <main className="flex-grow flex items-center justify-center p-4">
-      {message && (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 p-4 bg-black/40 backdrop-blur-lg text-white rounded-lg shadow-lg flex items-center space-x-4 border border-gray-600">
-          <span>{message}</span>
-          <button
-            onClick={handleCloseMessage}
-            className="text-gray-300 hover:text-white transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      )}
-
-      <div className="w-full max-w-7xl flex flex-col items-center justify-center bg-white/80 rounded-xl p-6 sm:p-10">
-        <button
-          onClick={() => navigate('/')}
-          className="absolute top-4 left-4 text-gray-800 hover:text-gray-600 transition-colors"
-        >
-          &larr; Back
-        </button>
-
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 text-center">
-          Find Your Company / Startup
+    <main className="flex-grow flex items-center justify-center p-4 text-center">
+      <div className="w-full max-w-4xl p-6 sm:p-10 bg-white/80 rounded-xl shadow-2xl">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+          Welcome to JB_Finder!
         </h1>
-
-        <input
-          type="text"
-          placeholder="Enter company or startup..."
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-          className="w-full max-w-md p-4 mb-6 rounded-xl border border-gray-300 focus:outline-none focus:ring-4 focus:ring-purple-300 transition-all"
-        />
-
-        <button
-          onClick={handleTrack}
-          className="w-full max-w-md bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 rounded-xl shadow-lg hover:scale-105 transform transition-all"
-        >
-          {loading ? 'Searching...' : 'Track'}
-        </button>
-
-        {/* Responsive 3-block grid */}
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-          {companyData && companyData.symbol && (
-            <div className="p-6 bg-white rounded-lg shadow-md w-full">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">{companyData.name}</h2>
-              <p><strong>Symbol:</strong> {companyData.symbol}</p>
-              <p><strong>Currency:</strong> {companyData.currency}</p>
-              <p><strong>Exchange:</strong> {companyData.exchange}</p>
-            </div>
-          )}
-
-          {newsData && newsData.articles && newsData.articles.length > 0 && (
-            <div className="p-6 bg-white rounded-lg shadow-md w-full">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Latest News</h3>
-              {newsData.articles.slice(0, 3).map((article, index) => (
-                <div key={index} className="mb-4">
-                  <a
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline font-semibold"
-                  >
-                    {article.title}
-                  </a>
-                  <p className="text-gray-600 text-sm">{article.description}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {githubData && githubData.length > 0 && (
-            <div className="p-6 bg-white rounded-lg shadow-md w-full">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Top GitHub Repositories</h3>
-              {githubData.slice(0, 3).map((repo, index) => (
-                <div key={index} className="mb-4">
-                  <a
-                    href={repo.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline font-semibold"
-                  >
-                    {repo.name}
-                  </a>
-                  <p className="text-gray-600 text-sm">
-                    {repo.description || 'No description available.'}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <p className="text-lg text-gray-700 mb-8">
+          Discover key insights about your favorite companies and startups. Track financial data, latest news, and GitHub activity all in one place.
+        </p>
+        {!isAuthenticated ? (
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link 
+              to="/login"
+              className="px-8 py-4 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-105 
+              bg-blue-600 text-white shadow-lg"
+            >
+              Log In
+            </Link>
+            <Link 
+              to="/signup"
+              className="px-8 py-4 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-105 
+              bg-gray-200 text-gray-800 shadow-lg"
+            >
+              Sign Up
+            </Link>
+          </div>
+        ) : (
+          <Link 
+            to="/company-select"
+            className="px-8 py-4 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-105 
+            bg-purple-600 text-white shadow-lg"
+          >
+            Start Tracking
+          </Link>
+        )}
       </div>
     </main>
   );
 };
 
-export default CompanySelect;
+export default Home;

@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://company-analyzer-tyeq.vercel.app/', // <--- Update this line
+        target: 'https://company-analyzer-tyeq.vercel.app/', 
         changeOrigin: true,
         secure: false,
       }
