@@ -7,7 +7,7 @@ const Footer = () => {
         {/* Left Section */}
         <p className="text-sm text-center sm:text-left">
           &copy; {new Date().getFullYear()} JB_Finder. All rights reserved. Devloped by Prem Sharma.
-        </p>
+        </p> 
 
         {/* Right Section */}
         <div className="flex space-x-6 text-sm">
