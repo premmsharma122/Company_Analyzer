@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth.js';
-
+ 
 const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
