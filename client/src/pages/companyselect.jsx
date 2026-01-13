@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/useAuth.js'; // Correct import path
+import useAuth from '../hooks/useAuth.js'; 
 
 const CompanySelect = () => {
   const [company, setCompany] = useState('');
@@ -11,7 +11,7 @@ const CompanySelect = () => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { logout } = useAuth(); // If you want to use logout here
+  const { logout } = useAuth(); 
 
   // Base URL for backend (empty in local -> proxy will handle, set in Netlify for prod)
   const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "";
