@@ -2,7 +2,7 @@ import express from 'express';
 import fetch from 'node-fetch';
 
 const router = express.Router();
-
+ 
 // Fetch stock symbol for a company from Twelve Data
 router.get('/search-symbol', async (req, res) => {
   try {
